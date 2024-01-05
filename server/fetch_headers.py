@@ -14,54 +14,57 @@ API_ENDPOINT = "https://mobile.southwest.com/api/mobile-air-operations/v1/mobile
 # stolen from @byalextran at https://github.com/byalextran/southwest-headers
 HEADER_REGEX = "x-api-key|x-user-experience-id|x-channel-id|^[\w]+?-\w{1,2}$"
 
-print("Fetching headers...")
-
 options = Options()
 options.add_argument("--headless")
 
-# start broswer
-driver = webdriver.Chrome(options=options)
-driver.get("https://mobile.southwest.com/check-in")
 
-# wait for page load
-wait = WebDriverWait(driver, 10)
-wait.until(
-    EC.presence_of_element_located((By.NAME, "recordLocator")) and
-    EC.presence_of_element_located((By.NAME, "firstName")) and
-    EC.presence_of_element_located((By.NAME, "lastName"))
-)
+def fetch():
 
-# fill out form
-confirmation_input = driver.find_element(By.NAME, "recordLocator")
-first_name_input = driver.find_element(By.NAME, "firstName")
-last_name_input = driver.find_element(By.NAME, "lastName")
+    print("Fetching headers...")
 
-confirmation_input.clear()
-confirmation_input.send_keys("RANDRA")
+    # start broswer
+    driver = webdriver.Chrome(options=options)
+    driver.get("https://mobile.southwest.com/check-in")
 
-first_name_input.clear()
-first_name_input.send_keys("Raj")
+    # wait for page load
+    wait = WebDriverWait(driver, 10)
+    wait.until(
+        EC.presence_of_element_located((By.NAME, "recordLocator")) and
+        EC.presence_of_element_located((By.NAME, "firstName")) and
+        EC.presence_of_element_located((By.NAME, "lastName"))
+    )
 
-last_name_input.clear()
-last_name_input.send_keys("Andra")
+    # fill out form
+    confirmation_input = driver.find_element(By.NAME, "recordLocator")
+    first_name_input = driver.find_element(By.NAME, "firstName")
+    last_name_input = driver.find_element(By.NAME, "lastName")
 
-confirmation_input.submit()
+    confirmation_input.clear()
+    confirmation_input.send_keys("RANDRA")
 
-# wait for server response
-time.sleep(1)
+    first_name_input.clear()
+    first_name_input.send_keys("Raj")
 
-# grab headers
-headers = {}
-for request in driver.requests:
-    if request.response and request.url.startswith(API_ENDPOINT):
-        for key in request.headers:
-            if re.match(HEADER_REGEX, key, re.I):
-                headers[key] = request.headers[key]
+    last_name_input.clear()
+    last_name_input.send_keys("Andra")
 
-# write to file
-f = open("headers.json", "w")
-json.dump(headers, f)
-driver.quit()
-f.close()
+    confirmation_input.submit()
 
-print("Done fetching headers!")
+    # wait for server response
+    time.sleep(1)
+
+    # grab headers
+    headers = {}
+    for request in driver.requests:
+        if request.response and request.url.startswith(API_ENDPOINT):
+            for key in request.headers:
+                if re.match(HEADER_REGEX, key, re.I):
+                    headers[key] = request.headers[key]
+
+    # write to file
+    f = open("headers.json", "w")
+    json.dump(headers, f)
+    driver.quit()
+    f.close()
+
+    print("Done fetching headers!")
