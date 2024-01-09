@@ -54,7 +54,7 @@ function normalizeTime(time: string) {
 
 export default function App() {
 
-    const { register, handleSubmit, getValues, formState: { errors } } = useForm<ReserveFormData>()
+    const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<ReserveFormData>()
     const reserve = useMutation({
         mutationFn: (data: ReserveRequestData) => {
             return axios.post('http://localhost:8000/reserve', data)
@@ -80,22 +80,29 @@ export default function App() {
                     {/* date */}
                     <div className='flex flex-col sm:flex-row gap-5'>
                         {/* input here */}
-                        <input className='p-3 bg-neutral-800 rounded-md w-full' type='text' inputMode='numeric' placeholder='mm/dd/yyyy' onChange={(e) => { e.target.value = normalizeDate(e.target.value) }}
+                        <input className='p-3 bg-neutral-800 rounded-md w-full' type='tel' inputMode='numeric' placeholder='mm/dd/yyyy' onChange={(e) => { setValue('date', normalizeDate(e.target.value)) }}
                             ref={register('date', {
-                                // required: {
-                                //     value: true,
-                                //     message: 'Valid date required.'
-                                // },
-
+                                required: {
+                                    value: true,
+                                    message: 'Valid date required.'
+                                },
+                                pattern: {
+                                    value: /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[1,2])\/(19|20)\d{2}$/,
+                                    message: 'Valid date required.'
+                                }
                             }).ref}
                         />
                         <div className='flex gap-5 w-full'>
-                            <input className='p-3 bg-neutral-800 rounded-md w-full' type='text' inputMode='numeric' placeholder='hh:mm' onChange={(e) => { e.target.value = normalizeTime(e.target.value) }}
+                            <input className='p-3 bg-neutral-800 rounded-md w-full' type='tel' inputMode='numeric' placeholder='hh:mm' onChange={(e) => { setValue('time', normalizeTime(e.target.value)) }}
                                 ref={register('time', {
-                                    // required: {
-                                    //     value: true,
-                                    //     message: 'Valid time required.'
-                                    // },
+                                    required: {
+                                        value: true,
+                                        message: 'Valid time required.'
+                                    },
+                                    pattern: {
+                                        value: /^([0[0-9]|1[0-9]):[0-5][0-9]$/,
+                                        message: 'Valid time required.'
+                                    }
                                 }).ref}
                             />
                             <select className='bg-neutral-800 rounded-md p-3' {...register('meridiem', { required: { value: true, message: 'Valid time required.' } })}>
@@ -107,7 +114,7 @@ export default function App() {
 
                     {/* submit and status */}
                     < div className='flex justify-between' >
-                        {reserve.isSuccess ? <div className='text-green-500 my-auto'>Success! You will automatically be checked in at time here </div> : null}
+                        {reserve.isSuccess ? <div className='text-green-500 my-auto'>{`You will automatically be checked in on ${getValues('date')} at ${getValues('time')} ${getValues('meridiem')}.`}</div> : null}
                         {reserve.isError ? <div className='text-red-500 my-auto'>An error occured contacting the server.</div> : null}
                         {reserve.isPending ? <div className='text-yellow-500 my-auto'>Loading...</div> : null}
                         {reserve.isIdle ? <div className='text-red-500 my-auto'>{displayErrors(errors)}</div> : null}
