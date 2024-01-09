@@ -1,6 +1,7 @@
 # backend
 env
 headers.json
+settings.py
 plan.txt
 
 # frontend
