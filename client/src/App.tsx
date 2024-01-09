@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { useState } from 'react'
 import { FieldErrors, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 
@@ -22,13 +21,17 @@ type ReserveRequestData = {
 }
 
 function transformData(data: ReserveFormData): ReserveRequestData {
-    console.log(data.date, data.time, data.meridiem)
-    const dateTimeString = new Date(/* TODO */).toISOString()
+    const [month, day, year] = data.date.split('/')
+    let [hour, minute] = data.time.split(':')
+    if (data.meridiem === 'pm') {
+        hour = String(Number(hour) + 12)
+    }
+    const dateTime = new Date(Number(year), Number(month), Number(day), Number(hour), Number(minute))
     return {
         firstName: data.firstName,
         lastName: data.lastName,
         confirmation: data.confirmation,
-        dateTimeString,
+        dateTimeString: dateTime.toISOString(),
         email: data.email,
     }
 }
@@ -57,6 +60,7 @@ export default function App() {
     const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<ReserveFormData>()
     const reserve = useMutation({
         mutationFn: (data: ReserveRequestData) => {
+            // TODO: change to actual server
             return axios.post('http://localhost:8000/reserve', data)
         }
     })
