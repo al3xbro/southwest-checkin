@@ -3,4 +3,4 @@ from django.http import HttpResponse
 
 
 def reserve(request):
-    return HttpResponse("Hello, world. You're at the index.")
+    return HttpResponse("Hello, world. You're at the polls index.")
