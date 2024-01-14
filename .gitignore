@@ -4,6 +4,7 @@ headers.json
 settings.py
 plan.txt
 dump.rdb
+celerybeat-schedule
 
 # frontend
 node_modules
