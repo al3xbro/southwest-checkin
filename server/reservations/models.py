@@ -7,3 +7,8 @@ class Reservation(models.Model):
     email = models.EmailField()
     reservation_number = models.CharField(max_length=6)
     reservation_date = models.DateTimeField()
+
+
+class Task(models.Model):
+    task_args = models.JSONField(default=list)
+    due_date = models.DateTimeField()

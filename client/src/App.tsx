@@ -61,7 +61,11 @@ export default function App() {
     const reserve = useMutation({
         mutationFn: (data: ReserveRequestData) => {
             // TODO: change to actual server
-            return axios.post('http://localhost:8000/reserve', data)
+            return axios.post('http://localhost:8000/reserve/', data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            })
         }
     })
 
@@ -91,7 +95,7 @@ export default function App() {
                                     message: 'Valid date required.'
                                 },
                                 pattern: {
-                                    value: /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[1,2])\/(19|20)\d{2}$/,
+                                    value: /(0[1-9]|1[012])\/(0[1-9]|[12][0-9]|3[01])\/(19|20)\d{2}/,
                                     message: 'Valid date required.'
                                 }
                             }).ref}
@@ -104,7 +108,7 @@ export default function App() {
                                         message: 'Valid time required.'
                                     },
                                     pattern: {
-                                        value: /^([0[0-9]|1[0-9]):[0-5][0-9]$/,
+                                        value: /^(0[0-9]|1[0-2]):[0-5][0-9]$/,
                                         message: 'Valid time required.'
                                     }
                                 }).ref}

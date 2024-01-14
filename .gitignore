@@ -3,6 +3,7 @@ env
 headers.json
 settings.py
 plan.txt
+dump.rdb
 
 # frontend
 node_modules
