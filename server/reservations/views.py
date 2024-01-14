@@ -6,8 +6,8 @@ def reserve(request):
     if request.method == 'POST':
         tasks.process_reservation(
             request.POST.get('firstName'),
-            request.POST.get('lastLame'),
-            request.POST.get('confirmationNumber'),
+            request.POST.get('lastName'),
+            request.POST.get('confirmation'),
             request.POST.get('email')
         )
         # add to queue
