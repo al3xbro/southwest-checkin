@@ -2,7 +2,6 @@
 env
 headers.json
 settings.py
-plan.txt
 dump.rdb
 
 # frontend
