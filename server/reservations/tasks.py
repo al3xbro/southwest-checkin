@@ -2,8 +2,6 @@ import time
 import re
 import json
 
-from django.core.mail import send_mail
-
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from seleniumwire import webdriver
@@ -11,6 +9,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+import requests
 
 scheduler = BackgroundScheduler({
     'apscheduler.jobstores.default': {
@@ -97,4 +97,12 @@ def get_headers():
 
 
 def process_reservation(first_name, last_name, confirmation_number, email):
-    print(first_name, last_name, confirmation_number, email)
+    with open("headers.json") as f:
+        headers = json.load(f)
+        headers["Content-Type"] = "application/json"
+        res = requests.post(f"{API_ENDPOINT}/{confirmation_number}", headers=headers, json={
+            "firstName": first_name,
+            "lastName": last_name,
+            "confirmationNumber": confirmation_number,
+        })
+        print(res.json())

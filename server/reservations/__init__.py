@@ -1,3 +1,4 @@
-from .tasks import scheduler
+from . import tasks
 
-scheduler.start()
+tasks.scheduler.start()
+tasks.get_headers()
