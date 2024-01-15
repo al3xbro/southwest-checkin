@@ -3,7 +3,6 @@ import re
 import json
 
 from django.core.mail import send_mail
-from celery import shared_task
 
 from seleniumwire import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -12,18 +11,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# southwest API endpoint; may change
+# southwest API endpoint and URL; may change
+CHECKIN_URL = "https://mobile.southwest.com/check-in"
 API_ENDPOINT = "https://mobile.southwest.com/api/mobile-air-operations/v1/mobile-air-operations/page/check-in"
 # stolen from @byalextran at https://github.com/byalextran/southwest-headers
 HEADER_REGEX = "x-api-key|x-user-experience-id|x-channel-id|^[\w]+?-\w{1,2}$"
 
 options = Options()
-options.add_argument("  --headless")
+options.add_argument("--headless")
 driver = webdriver.Chrome(options=options)
-driver.get("https://mobile.southwest.com/check-in")
+driver.get(CHECKIN_URL)
 
 
-@shared_task()
 def get_headers():
 
     print("Fetching headers...")
