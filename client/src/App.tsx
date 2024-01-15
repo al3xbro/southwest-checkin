@@ -26,12 +26,12 @@ function transformData(data: ReserveFormData): ReserveRequestData {
     if (data.meridiem === 'pm') {
         hour = String(Number(hour) + 12)
     }
-    const dateTime = new Date(Number(year), Number(month), Number(day), Number(hour), Number(minute))
+    const dateTime = new Date(Number(year), Number(month) - 1, Number(day), Number(hour), Number(minute))
     return {
         firstName: data.firstName,
         lastName: data.lastName,
         confirmation: data.confirmation,
-        dateTimeString: dateTime.toISOString(),
+        dateTimeString: dateTime.toUTCString(),
         email: data.email,
     }
 }
@@ -61,6 +61,7 @@ export default function App() {
     const reserve = useMutation({
         mutationFn: (data: ReserveRequestData) => {
             // TODO: change to actual server
+            console.log(data.dateTimeString)
             return axios.post('http://localhost:8000/reserve/', data, {
                 headers: {
                     "Content-Type": "multipart/form-data",

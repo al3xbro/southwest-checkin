@@ -4,12 +4,29 @@ import json
 
 from django.core.mail import send_mail
 
+from apscheduler.schedulers.background import BackgroundScheduler
+
 from seleniumwire import webdriver
 from selenium.webdriver.chrome.options import Options
-
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+scheduler = BackgroundScheduler({
+    'apscheduler.jobstores.default': {
+        'type': 'sqlalchemy',
+        'url': 'postgresql://django:django@localhost:5432/reservations',
+    },
+    'apscheduler.executors.default': {
+        'class': 'apscheduler.executors.pool:ThreadPoolExecutor',
+        'max_workers': '20',
+    },
+    'apscheduler.executors.processpool': {
+        'type': 'processpool',
+        'max_workers': '5',
+    },
+    'apscheduler.timezone': 'America/New_York',
+})
 
 # southwest API endpoint and URL; may change
 CHECKIN_URL = "https://mobile.southwest.com/check-in"
@@ -23,6 +40,7 @@ driver = webdriver.Chrome(options=options)
 driver.get(CHECKIN_URL)
 
 
+@scheduler.scheduled_job('interval', hours=12)
 def get_headers():
 
     print("Fetching headers...")
@@ -65,10 +83,15 @@ def get_headers():
                     headers[key] = request.headers[key]
 
     # write to file
-    f = open("headers.json", "w")
-    json.dump(headers, f)
-    driver.quit()
-    f.close()
+    if headers != {}:
+        f = open("headers.json", "w")
+        json.dump(headers, f)
+        driver.quit()
+        f.close()
+        driver.quit()
+    else:
+        print("Error fetching headers. Retrying...")
+        get_headers()
 
     print("Done fetching headers!")
 
