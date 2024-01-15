@@ -32,7 +32,8 @@ function transformData(data: ReserveFormData): ReserveRequestData {
         lastName: data.lastName,
         confirmation: data.confirmation,
         dateTimeString: dateTime.toUTCString(),
-        email: data.email,
+        // TODO: change after adding email
+        email: data.email ?? '',
     }
 }
 
@@ -61,7 +62,6 @@ export default function App() {
     const reserve = useMutation({
         mutationFn: (data: ReserveRequestData) => {
             // TODO: change to actual server
-            console.log(data.dateTimeString)
             return axios.post('http://localhost:8000/reserve/', data, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -84,7 +84,8 @@ export default function App() {
                         <input className='p-3 bg-neutral-800 rounded-md w-full' type='text' placeholder='Last Name' {...register('lastName', { required: { value: true, message: 'Last name required.' } })} />
                     </div>
                     <input className='p-3 bg-neutral-800 rounded-md w-full' type='text' placeholder='Confirmation Number' {...register('confirmation', { required: { value: true, message: 'Confirmation number required.' } })} />
-                    <input className='p-3 bg-neutral-800 rounded-md w-full' type='text' placeholder='Email' inputMode='email' {...register('email', { required: { value: true, message: 'Email required.' } })} />
+                    {/* TODO: change after adding email */}
+                    {/* <input className='p-3 bg-neutral-800 rounded-md w-full' type='text' placeholder='Email' inputMode='email' {...register('email', { required: { value: true, message: 'Email required.' } })} /> */}
 
                     {/* date */}
                     <div className='flex flex-col sm:flex-row gap-5'>
@@ -122,7 +123,7 @@ export default function App() {
                     </div >
 
                     {/* submit and status */}
-                    < div className='flex justify-between' >
+                    < div className='flex justify-between gap-5' >
                         {reserve.isSuccess ? <div className='text-green-500 my-auto'>{`You will automatically be checked in on ${getValues('date')} at ${getValues('time')} ${getValues('meridiem')}.`}</div> : null}
                         {reserve.isError ? <div className='text-red-500 my-auto'>An error occured contacting the server.</div> : null}
                         {reserve.isPending ? <div className='text-yellow-500 my-auto'>Loading...</div> : null}
