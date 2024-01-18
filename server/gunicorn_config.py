@@ -1,6 +1,6 @@
 import configparser
 conf = configparser.ConfigParser()
-conf.read('conf.ini')
+conf.read('config.ini')
 
 bind = f"{conf.get('App', 'host_ip')}:{conf.get('App', 'host_port')}"
 workers = 2 

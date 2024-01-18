@@ -1,6 +1,7 @@
 import time
 import re
 import json
+import requests
 
 import configparser
 
@@ -12,7 +13,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-import requests
 
 config = configparser.ConfigParser()
 config.read('config.ini')
