@@ -1,20 +1,23 @@
 from pathlib import Path
+import configparser
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = DJANGO_SECRET
+SECRET_KEY = config.get('App', 'django_secret')
 DEBUG = False
+
+# Application definition
 SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 3600
 ALLOWED_HOSTS = ['southwest.al3xbro.me']
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
@@ -53,11 +56,11 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DJANGO_NAME,
-        'USER': DJANGO_USER,
-        'PASSWORD': DJANGO_PASWWORD,
-        'HOST': '127.0.0.1',
-        'PORT': 5432,
+        'NAME': config.get('Database', 'database_name'),
+        'USER': config.get('Database', 'database_user'),
+        'PASSWORD': config.get('Database', 'database_password'),
+        'HOST': config.get('Database', 'database_host'),
+        'PORT': config.get('Database', 'database_port'),
     }
 }
 
@@ -65,7 +68,7 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'America/Los_Angeles'
+TIME_ZONE = config.get('App', 'timezone')
 USE_I18N = True
 USE_TZ = True
 

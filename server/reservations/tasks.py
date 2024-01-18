@@ -2,6 +2,8 @@ import time
 import re
 import json
 
+import configparser
+
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from seleniumwire import webdriver
@@ -12,10 +14,19 @@ from selenium.webdriver.support import expected_conditions as EC
 
 import requests
 
+config = configparser.ConfigParser()
+config.read('config.ini')
+DATABASE_HOST = config.get('Database', 'database_host')
+DATABASE_PORT = config.get('Database', 'database_port')
+DATABASE_NAME = config.get('Database', 'database_name')
+DATABASE_USER = config.get('Database', 'database_user')
+DATABASE_PASSWORD = config.get('Database', 'database_password')
+TIMEZONE = config.get('App', 'timezone')
+
 scheduler = BackgroundScheduler({
     'apscheduler.jobstores.default': {
         'type': 'sqlalchemy',
-        'url': 'postgresql://django:django@localhost:5432/reservations',
+        'url': f'postgresql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}',
     },
     'apscheduler.executors.default': {
         'class': 'apscheduler.executors.pool:ThreadPoolExecutor',
@@ -25,7 +36,7 @@ scheduler = BackgroundScheduler({
         'type': 'processpool',
         'max_workers': '5',
     },
-    'apscheduler.timezone': 'America/New_York',
+    'apscheduler.timezone': TIMEZONE,
 })
 
 # southwest API endpoint and URL; may change
