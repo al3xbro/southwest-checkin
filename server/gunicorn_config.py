@@ -1,5 +1,5 @@
 import configparser
-conf = configparser.confParser()
+conf = configparser.ConfigParser()
 conf.read('conf.ini')
 
 bind = f"{conf.get('App', 'host_ip')}:{conf.get('App', 'host_port')}"
