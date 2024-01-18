@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { FieldErrors, useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
+import { useEffect } from 'react'
 
 type ReserveFormData = {
     firstName: string,
@@ -58,12 +59,25 @@ function normalizeTime(time: string) {
 
 export default function App() {
 
+    let csrf_token: string
+
+    useEffect(() => {
+        axios.get('https://alexserver.sytes.net:8001/reserve/csrf/')
+            .then((res) => {
+                csrf_token = res.data.token
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }, [])
+
     const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<ReserveFormData>()
     const reserve = useMutation({
         mutationFn: (data: ReserveRequestData) => {
             return axios.post('https://alexserver.sytes.net:8001/reserve/', data, {
                 headers: {
                     "Content-Type": "multipart/form-data",
+                    "X-CSRFToken": csrf_token,
                 }
             })
         }
