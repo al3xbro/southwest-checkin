@@ -1,8 +1,8 @@
 import configparser
-config = configparser.ConfigParser()
-config.read('config.ini')
+conf = configparser.confParser()
+conf.read('conf.ini')
 
-bind = f"{config.get('App', 'host_ip')}:{config.get('App', 'host_port')}"
+bind = f"{conf.get('App', 'host_ip')}:{conf.get('App', 'host_port')}"
 workers = 2 
-certfile = config.get('App', 'certfile_path')
-keyfile = config.get('App', 'keyfile_path')
+certfile = conf.get('App', 'certfile_path')
+keyfile = conf.get('App', 'keyfile_path')
