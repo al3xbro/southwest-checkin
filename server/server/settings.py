@@ -15,7 +15,6 @@ DEBUG = False
 
 # Application definition
 SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS = 3600
 ALLOWED_HOSTS = ['southwest.al3xbro.me']
 
@@ -27,7 +26,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
