@@ -15,7 +15,11 @@ def reserve(request):
             request.POST.get('confirmation'),
             request.POST.get('email')
         ))
-        return HttpResponse(status=200)
+        return JsonResponse({
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST',
+            'Access-Control-Allow-Headers': 'Content-Type',
+        })
     else:
         return HttpResponse(status=404)
 
