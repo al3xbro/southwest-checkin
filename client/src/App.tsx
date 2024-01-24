@@ -61,7 +61,7 @@ export default function App() {
     const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm<ReserveFormData>()
     const reserve = useMutation({
         mutationFn: (data: ReserveRequestData) => {
-            return axios.post('http://localhost:8000/reserve/', data, {
+            return axios.post('https://alexserver.sytes.net:8001/reserve/', data, {
                 headers: {
                     "Content-Type": "application/json",
                 }
