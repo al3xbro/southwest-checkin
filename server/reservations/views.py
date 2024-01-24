@@ -6,6 +6,7 @@ from . import tasks
 
 
 def reserve(request):
+    print("recieved req")
     aware_datetime = datetime.strptime(request.POST.get(
         'dateTimeString').replace("GMT", "+00:00"), "%a, %d %b %Y %H:%M:%S %z")
     if request.method == 'POST':
@@ -15,11 +16,7 @@ def reserve(request):
             request.POST.get('confirmation'),
             request.POST.get('email')
         ))
-        return JsonResponse({
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST',
-            'Access-Control-Allow-Headers': 'Content-Type',
-        })
+        return HttpResponse(status=200)
     else:
         return HttpResponse(status=404)
 

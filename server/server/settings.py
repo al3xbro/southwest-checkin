@@ -19,7 +19,7 @@ SECURE_HSTS_SECONDS = 3600
 
 ALLOWED_HOSTS = ['southwest.al3xbro.me']
 CORS_ALLOWED_ORIGINS = [
-    "southwest.al3xbro.me",
+    "https://southwest.al3xbro.me",
 ]
 
 INSTALLED_APPS = [
