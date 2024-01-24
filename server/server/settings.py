@@ -16,15 +16,21 @@ DEBUG = False
 # Application definition
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 3600
+
 ALLOWED_HOSTS = ['southwest.al3xbro.me']
+CORS_ALLOWED_ORIGINS = [
+    "southwest.al3xbro.me",
+]
 
 INSTALLED_APPS = [
     'django.contrib.contenttypes',
+    'corsheaders',
     'reservations.apps.ReservationsConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

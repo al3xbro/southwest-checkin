@@ -63,8 +63,7 @@ export default function App() {
         mutationFn: (data: ReserveRequestData) => {
             return axios.post('https://alexserver.sytes.net:8001/reserve/', data, {
                 headers: {
-                    "Content-Type": "multipart/form-data",
-                    "Access-Control-Allow-Origin": "*",
+                    "Content-Type": "application/json",
                 }
             })
         }
