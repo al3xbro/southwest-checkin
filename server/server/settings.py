@@ -17,9 +17,9 @@ DEBUG = False
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 3600
 
-ALLOWED_HOSTS = ['southwest.al3xbro.me']
+ALLOWED_HOSTS = ['southwest.al3xbro.me', 'alexserver.sytes.net']
 CORS_ALLOWED_ORIGINS = [
-    "https://southwest.al3xbro.me",
+    'https://southwest.al3xbro.me',
 ]
 
 INSTALLED_APPS = [
