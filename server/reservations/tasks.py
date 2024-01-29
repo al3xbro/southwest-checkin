@@ -114,6 +114,6 @@ def process_reservation(first_name, last_name, confirmation_number, email):
         res = requests.post(f"{API_ENDPOINT}/{confirmation_number}", headers=headers, json={
             "firstName": first_name,
             "lastName": last_name,
-            "confirmationNumber": confirmation_number,
+            "recordLocator": confirmation_number,
         })
         print(res.json())
