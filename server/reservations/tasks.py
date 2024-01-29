@@ -90,8 +90,8 @@ def get_headers():
     for request in driver.requests:
         if request.response and request.url.startswith(CHECKIN_URL):
             for key in request.headers:
-                if re.match(HEADER_REGEX, key, re.I):
-                    headers[key] = request.headers[key]
+                # if re.match(HEADER_REGEX, key, re.I):
+                headers[key] = request.headers[key]
 
     # write to file
     if headers != {}:
@@ -110,11 +110,38 @@ def get_headers():
 def process_reservation(first_name, last_name, confirmation_number, email):
     with open('headers.json') as f:
         headers = json.load(f)
-        headers['Content-Type'] = 'application/json'
         res = requests.post(f'{CHECKIN_URL}/{confirmation_number}', headers=headers, json={
             'firstName': first_name,
             'lastName': last_name,
             'recordLocator': confirmation_number,
         })
-        print(headers)
+        print(res.headers)
         print(res.json())
+
+def browser_reservation(first_name, last_name, confirmation_number, email):
+    # wait for page load
+    wait = WebDriverWait(driver, 10)
+    wait.until(
+        EC.presence_of_element_located((By.NAME, 'recordLocator')) and
+        EC.presence_of_element_located((By.NAME, 'firstName')) and
+        EC.presence_of_element_located((By.NAME, 'lastName'))
+    )
+
+    # fill out form
+    confirmation_input = driver.find_element(By.NAME, 'recordLocator')
+    first_name_input = driver.find_element(By.NAME, 'firstName')
+    last_name_input = driver.find_element(By.NAME, 'lastName')
+
+    confirmation_input.clear()
+    confirmation_input.send_keys(confirmation_number)
+
+    first_name_input.clear()
+    first_name_input.send_keys(first_name)
+
+    last_name_input.clear()
+    last_name_input.send_keys(last_name)
+
+    confirmation_input.submit()
+
+    # wait for server response
+    time.sleep(1)
